@@ -1,0 +1,18 @@
+# Byte-compiled files
+*.pyc
+__pycache__/
+
+# Distribution/build artifacts
+build/
+dist/
+*.egg-info/
+
+# IDE/editor configurations
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+
+# Environment files
+.env
