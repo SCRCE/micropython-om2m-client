@@ -17,13 +17,26 @@ upip.install("micropython-om2m-client")
 ```python
 from om2m_client import OM2MClient
 
+        self.cse_ip = cse_ip
+        self.cse_port = cse_port
+        self.cse= cse_type + "-cse"
+        self.cse_name = cse_type + "-name"
+        self.device_name = device_name
+        self.cse_type = cse_type
+        self.container_name = container_name
+        self.cred = cred
+
 client = OM2MClient(
-    cse_url="http://example.com",
+    cse_ip="180.27.251.7"
+    cse_port="8282"
+    cse_type="mn"
+    cred="admin:admin"
     device_name="MyDevice",
     container_name="MyContainer"
 )
 
 client.register_ae()
+client.create_descriptor()
 client.create_container()
 client.send_data({"key": "value"})
 ```
