@@ -12,35 +12,43 @@ class OM2MClient:
     Handles AE registration, container creation, and data transmission.
     """
 
-    def __init__(self, cse_url, device_name, container_name, origin='admin:admin'):
+    def __init__(self, cse_ip, device_name, container_name, cse_port=8282, cse_type="mn", cred="admin:admin"):
         """
         Initializes the OM2MClient with necessary configurations.
         
-        :param cse_url: Base URL of the OM2M CSE (e.g., "http://10.83.2.249:8282/~/mn-cse/mn-name")
+        :param cse_ip: IP address of the OM2M CSE (e.g., "10.83.2.249")
         :param device_name: Name of the device/Application Entity (AE)
         :param container_name: Name of the container to store data
-        :param origin: Authorization credentials (default: 'admin:admin')
+        :param cse_port: Port number for the CSE (default: 8282)
+        :param cse_name: Path to the CSE name (default: "mn-cse/mn-name")
+        :param cred: Authorization credentials (default: 'admin:admin')
         """
-        self.cse_url = cse_url.rstrip('/')
+        self.cse_ip = cse_ip
+        self.cse_port = cse_port
+        self.cse= cse_type + "-cse"
+        self.cse_name = cse_type + "-name"
         self.device_name = device_name
+        self.cse_type = cse_type
         self.container_name = container_name
-        self.origin = origin
+        self.cred = cred
 
+        # Construct the CSE URL
+        self.cse_url = f"http://{self.cse_ip}:{self.cse_port}/~/" + self.cse_name
         # Define AE and Container URLs
         self.ae_url = f"{self.cse_url}/{self.device_name}"
         self.container_url = f"{self.ae_url}/{self.container_name}"
 
         # Headers
         self.headers_ae = {
-            'X-M2M-Origin': self.origin,
+            'X-M2M-Origin': self.cred,
             'Content-Type': 'application/json;ty=2'  # ty=2 for AE
         }
         self.headers_cnt = {
-            'X-M2M-Origin': self.origin,
+            'X-M2M-Origin': self.cred,
             'Content-Type': 'application/json;ty=3'  # ty=3 for Container
         }
         self.headers_data = {
-            'X-M2M-Origin': self.origin,
+            'X-M2M-Origin': self.cred,
             'Content-Type': 'application/json;ty=4'  # ty=4 for ContentInstance
         }
 
@@ -70,13 +78,20 @@ class OM2MClient:
     def create_container(self):
         """
         Creates a container under the AE if it doesn't already exist.
-        """
+        """ 
         payload = {
             "m2m:cnt": {
                 "rn": self.container_name
             }
         }
         try:
+            # Check if the container already exists
+            check_response = requests.get(self.container_url, headers=self.headers_cnt)
+            if check_response.status_code == 200:
+                print("[OM2M] Container already exists.")
+                return
+
+            # Create the container if it does not exist
             response = requests.post(self.ae_url, headers=self.headers_cnt, json=payload)
             if response.status_code == 201:
                 print("[OM2M] Container created successfully.")
@@ -106,7 +121,6 @@ class OM2MClient:
                 raise OM2MError(f"Failed to create Descriptor. Status code: {response.status_code}, Response: {response.text}")
         except Exception as e:
             raise OM2MError(f"Exception during Descriptor creation: {e}")
-
 
     def send_data(self, data):
         """
