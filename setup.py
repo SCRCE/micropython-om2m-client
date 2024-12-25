@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="micropython-om2m-client",
-    version="0.1.0b1",
+    version="0.1.0b2",
     description="A MicroPython client for interacting with OM2M CSE (Work in Progress).",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
