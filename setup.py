@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="micropython-om2m-client",
-    version="0.1.0a4",
+    version="0.1.0a7",
     description="A MicroPython client for interacting with OM2M CSE (Work in Progress).",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
@@ -16,7 +16,8 @@ setup(
         "Programming Language :: Python :: Implementation :: MicroPython",
     ],
     install_requires=[
-        "urequests",  # HTTP requests library for MicroPython
-        "ujson"       # JSON library for MicroPython
+        "urequests>=0.9.0",  
+        "ujson>=1.35",       
+        "umqtt.robust>=1.0.0",  
     ],
 )
