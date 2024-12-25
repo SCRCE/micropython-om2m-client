@@ -7,7 +7,7 @@ This README provides a step-by-step guide to using the OM2M Python client to int
 1. Ensure you have an OM2M MN-CSE server running and accessible.
 2. Install the `om2m-client` library:
    ```bash
-   pip install om2m-client
+   pip install micropython-om2m-client
    ```
 3. Adjust the `base_url` and credentials to match your MN-CSE setup.
 
