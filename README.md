@@ -1,4 +1,4 @@
-# OM2M Python Client Example Documentation
+# OM2M Python Client Documentation
 
 This README provides a step-by-step guide to using the OM2M Python client to interact with an OM2M MN-CSE (Middle Node Common Services Entity). The code demonstrates creating and managing resources such as `Application Entities (AE)`, `Containers`, `ContentInstances`, and `Subscriptions`.
 
